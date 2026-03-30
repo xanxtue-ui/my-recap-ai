@@ -23,9 +23,10 @@ movie_name = st.text_input("ဇာတ်ကားနာမည်ကို ဒီ
 
 if st.button("Generate Pro Script"):
     if movie_name:
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Error 404 မတက်အောင် models/ ဆိုတာလေး ထည့်သွင်းပေးထားပါတယ်
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
-        prompt = f"Write a professional 20-part TikTok movie recap script for '{movie_name}' in Burmese. Each part < 3 mins. Include strong hooks and cliffhangers. Must be high-quality storytelling."
+        prompt = f"Write a professional 20-part TikTok movie recap script for '{movie_name}' in Burmese. Each part < 3 mins. Include strong hooks and cliffhangers. High-quality storytelling style."
         
         with st.spinner('Pro Script များကို ရေးသားနေပါသည်...'):
             try:
@@ -33,11 +34,12 @@ if st.button("Generate Pro Script"):
                 st.subheader(" Generated Script")
                 full_script = st.text_area("Script Details:", response.text, height=500)
                 
+                # အသံဖိုင် စမ်းသပ်ထုတ်ပေးခြင်း
                 tts = gTTS(text=full_script[:500], lang='my')
                 tts.save("audio.mp3")
                 st.audio("audio.mp3")
                 st.success("အားလုံးအဆင်ပြေပါတယ်။")
             except Exception as e:
-                st.error(f"Error: {str(e)}")
+                st.error(f"Error တက်သွားပါတယ်: {str(e)}")
     else:
         st.warning("ဇာတ်ကားနာမည် အရင်ရိုက်ထည့်ပေးပါ။")
